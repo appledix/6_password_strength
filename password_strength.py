@@ -3,16 +3,16 @@ import re
 MINIMUM_PASSWORD_LENGTH = 8
 
 def case_sensitive(password):
-    return re.search(r'[A-ZА-Я]', password) != None and re.search(r'[a-zа-я]', password) != None
+    return re.search(r'[A-ZА-Я]', password) is not None and re.search(r'[a-zа-я]', password) is not None
 
 def includes_digits(password):
-    return re.search(r'[0-9]', password) != None
+    return re.search(r'[0-9]', password) is not None
 
 def includes_letters(password):
-    return re.search(r'[A-Za-zА-Яа-я]', password) != None
+    return re.search(r'[A-Za-zА-Яа-я]', password) is not None
 
 def includes_special_chars(password):
-    return re.search(r'[\W]', password) != None
+    return re.search(r'[\W]', password) is not None
 
 def load_data(filepath):
     with open(filepath, 'r') as text_file:
@@ -26,7 +26,8 @@ def appears_in_blacklist(password):
 
 def get_length_points(password):
     password_length = len(password)
-    points = 0 if password_length < MINIMUM_PASSWORD_LENGTH else round((password_length - MINIMUM_PASSWORD_LENGTH) / 4 + 0.5)
+    points = 0 if password_length < MINIMUM_PASSWORD_LENGTH \
+    else round((password_length - MINIMUM_PASSWORD_LENGTH) / 4 + 0.5)
     return points
 
 def calculate_password_strength(password):
@@ -44,6 +45,7 @@ def calculate_password_strength(password):
     if includes_special_chars(password): password_strength += 1
 
     password_strength += get_length_points(password)
+    
     if password_strength > 10: password_strength = 10
 
     return password_strength
