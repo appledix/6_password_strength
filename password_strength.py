@@ -1,9 +1,12 @@
+import getpass
 import re
+
 
 MINIMUM_PASSWORD_LENGTH = 8
 
 def case_sensitive(password):
-    return re.search(r'[A-ZА-Я]', password) is not None and re.search(r'[a-zа-я]', password) is not None
+    return re.search(r'[A-ZА-Я]', password) is not None \
+    and re.search(r'[a-zа-я]', password) is not None
 
 def includes_digits(password):
     return re.search(r'[0-9]', password) is not None
@@ -14,15 +17,26 @@ def includes_letters(password):
 def includes_special_chars(password):
     return re.search(r'[\W]', password) is not None
 
-def load_data(filepath):
+def load_blacklist(filepath):
     with open(filepath, 'r') as text_file:
         data = text_file.read()
-    return data
+    return re.findall(r'\w+', data)
+
+def get_blacklist_filepath():
+    return input("Введите адрес текстового файла " +
+        " cо списком запрещённых паролей\n(можно оставить пустым):\n")
 
 def appears_in_blacklist(password):
-    blacklist_filepath = "blacklist.txt"
-    blacklist = load_data(blacklist_filepath).split("\n")
-    return password in blacklist
+    while(True):
+        try:
+            blacklist_filepath = get_blacklist_filepath()
+            if blacklist_filepath != "":
+                return password in load_blacklist(blacklist_filepath)
+        except Exception:
+            continue
+        else:
+            break
+    return False
 
 def get_length_points(password):
     password_length = len(password)
@@ -53,7 +67,7 @@ def calculate_password_strength(password):
 
 if __name__ == '__main__':
     while True:
-        password = input("Введите пароль для проверки:\n")
+        password = getpass.getpass(prompt="Введите пароль для проверки:\n", stream=None)
         if password != "": break
     password_strength = calculate_password_strength(password)
     print("Оценка пароля:%d/10." % password_strength)
