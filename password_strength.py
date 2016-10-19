@@ -30,7 +30,7 @@ def appears_in_blacklist(password):
     while(True):
         try:
             blacklist_filepath = get_blacklist_filepath()
-            if blacklist_filepath != "":
+            if blacklist_filepath:
                 return password in load_blacklist(blacklist_filepath)
         except Exception:
             continue
@@ -68,6 +68,6 @@ def calculate_password_strength(password):
 if __name__ == '__main__':
     while True:
         password = getpass.getpass(prompt="Введите пароль для проверки:\n", stream=None)
-        if password != "": break
+        if password: break
     password_strength = calculate_password_strength(password)
     print("Оценка пароля:%d/10." % password_strength)
