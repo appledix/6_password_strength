@@ -53,11 +53,7 @@ def calculate_password_strength(password, blacklist=None):
         password_strength += 1
 
     password_strength += get_length_points(password)
-    
-    if password_strength > 10: 
-        password_strength = 10
-
-    return password_strength
+    return min(password_strength, 10)
 
 
 if __name__ == '__main__':
